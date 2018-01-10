@@ -25,13 +25,28 @@ def logistic_function(net):
         out.append(1 / (1 + math.exp(-net.item(i))))
     return out
 
+def get_output_error(output, target):
+    errors = []
+    for i in range(len(output)):
+        errors.append(math.pow(1/2*(target[i] - output[i]), 2))
+    return errors
+
+def error_total(errors):
+    return sum(errors)
+
+def delta_rule(out, out_anterior, target):
+    return -(target - out) * out * (1 - out) * out_anterior # En este caso out anterior es la entrada
+
+
 
 while True:
     error_count = 0
     for inputs, target in input_values:
         net = sum_of_products(inputs, weights)
         out = logistic_function(net)
-        print(out)
+        errors = get_output_error(out, target)
+        error = error_total(errors)
+        print(error)
         break
     break
             
