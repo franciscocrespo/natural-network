@@ -45,14 +45,13 @@ def modify_weight(ws, inp, delta, learning_rate, row):
     w_t = np.transpose(weights) 
     for i in range(ws.size):
         item = ws.item(i) - learning_rate * delta * inp[i]
-        print(item)
-        ws.itemset((row, i), item)
-    w_t[row] = ws
-    weights = np.transpose(w_t)
+        #print(item)
+        weights.itemset((i, row), item)
     return weights
 
 print(weights)
-while True:
+i = 0
+while i < 5:
     error_count = 0
     for inputs, target in input_values:
 
@@ -67,10 +66,10 @@ while True:
             delta = delta_rule(out[i], target[i])
             weights_t = np.transpose(weights)
             modify_weight(weights_t[i], inputs, delta, learning_rate, i)
-        break
-    break
+    i += 1   
 print('-'*60)
 print(weights)
+
 
             
 
