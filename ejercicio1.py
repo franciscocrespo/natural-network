@@ -47,11 +47,10 @@ def modify_weight(ws, inp, delta, learning_rate, row):
         item = ws.item(i) - learning_rate * delta * inp[i]
         #print(item)
         weights.itemset((i, row), item)
-    return weights
+    return weights 
 
-print(weights)
-i = 0
-while i < 5:
+# Training
+while True:
     error_count = 0
     for inputs, target in input_values:
 
@@ -61,15 +60,24 @@ while i < 5:
         errors = get_output_error(out, target)
         error = error_total(errors)
         
+        if error > 0.0004:
+            error_count += 1
+        
         # BackPropagation
         for i in range(len(out)):
             delta = delta_rule(out[i], target[i])
             weights_t = np.transpose(weights)
             modify_weight(weights_t[i], inputs, delta, learning_rate, i)
-    i += 1   
-print('-'*60)
+    
+    if error_count == 0:
+        break
+
 print(weights)
+print('-'*60) 
 
+# Prueba
+inputs = [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1]
+net = sum_of_products(inputs, weights)
+out = logistic_function(net)
 
-            
-
+print(out)
