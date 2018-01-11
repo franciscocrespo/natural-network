@@ -40,25 +40,37 @@ def error_total(errors):
 def delta_rule(out_j, target):
     return -(target - out_j) * out_j * (1 - out_j) # (d E_total)/(d w_j)
 
-def modify_weight(weight, xj, delta, learning_rate):
-    return weight - learning_rate * delta * xj
+def modify_weight(ws, inp, delta, learning_rate, row):
+    global weights
+    w_t = np.transpose(weights) 
+    for i in range(ws.size):
+        item = ws.item(i) - learning_rate * delta * inp[i]
+        print(item)
+        ws.itemset((row, i), item)
+    w_t[row] = ws
+    weights = np.transpose(w_t)
+    return weights
 
-
-
+print(weights)
 while True:
     error_count = 0
     for inputs, target in input_values:
+
+        #FordWard
         net = sum_of_products(inputs, weights)
         out = logistic_function(net)
         errors = get_output_error(out, target)
         error = error_total(errors)
+        
         # BackPropagation
-        weights_t = np.transpose(weights)
         for i in range(len(out)):
             delta = delta_rule(out[i], target[i])
-            
-                
+            weights_t = np.transpose(weights)
+            modify_weight(weights_t[i], inputs, delta, learning_rate, i)
         break
     break
+print('-'*60)
+print(weights)
+
             
 
