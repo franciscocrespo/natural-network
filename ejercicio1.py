@@ -7,7 +7,7 @@ learning_rate = 0.5
 
 weights = np.matrix([[random.uniform(0.1, 0.3) for j in range(4)] for i in range(11)])
 
-# El último termino, que es igual a 1 es el bias
+# The last item is bias. Bias is always equal to 1
 input_values = [((1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1), (0, 0, 0, 0)), 
                 ((0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1), (0, 0, 0, 1)), 
                 ((0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1), (0, 0, 1, 0)), 
@@ -20,11 +20,11 @@ input_values = [((1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1), (0, 0, 0, 0)),
                 ((0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1), (1, 0, 0, 1))]
 
 def sum_of_products(inputs, weights):
-    return np.dot(inputs, weights) # Hace el producto punto entre dos matrices
+    return np.dot(inputs, weights) # This make te product between matrixs
 
 def logistic_function(net):
     out = []
-    for i in range(net.size): # da el tamaño de la matriz (cantidad de elementos)
+    for i in range(net.size): # get lenght of net
         out.append(1 / (1 + math.exp(-net.item(i))))
     return out
 
@@ -42,16 +42,15 @@ def delta_rule(out_j, target):
 
 def modify_weight(ws, inp, delta, learning_rate, row):
     global weights
-    w_t = np.transpose(weights) 
     for i in range(ws.size):
         item = ws.item(i) - learning_rate * delta * inp[i]
-        #print(item)
         weights.itemset((i, row), item)
     return weights 
 
 # Training
 while True:
     error_count = 0
+    error = 0
     for inputs, target in input_values:
 
         #FordWard
@@ -70,12 +69,14 @@ while True:
             modify_weight(weights_t[i], inputs, delta, learning_rate, i)
     
     if error_count == 0:
+        print(error)
         break
 
+print('-'*60)
 print(weights)
 print('-'*60) 
 
-# Prueba
+# Test
 inputs = [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1]
 net = sum_of_products(inputs, weights)
 out = logistic_function(net)
